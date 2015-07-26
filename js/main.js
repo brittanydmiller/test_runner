@@ -28,7 +28,18 @@ function runTests(){
   }
 }
 
+function loadTests(){
+  var container = document.getElementById("js-test-container")
+  var html = "";
+  for ( test in tests ) {
+    html = html + "<div><h2>Test " + test + "</h2><h3>Status: <span id=\"status"+ test +"\">Not Started Yet</span></h3><p>" + tests[test]["description"] + "<p></div>";
+  }
+  container.innerHTML = html;
+}
+
+
 window.onload = function(){
   document.getElementById("js-test-runner").addEventListener("click", runTests);
+  loadTests();
 }
 
