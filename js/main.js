@@ -55,7 +55,7 @@ function updateTest(text, index){
 function sayDone(){
   var final_message = document.createElement("h2");
   final_message.innerText = "All Tests Completed!"
-  document.getElementById("js-test-container").appendChild(final_message);
+  document.getElementById("js-stats").appendChild(final_message);
 };
 
 
