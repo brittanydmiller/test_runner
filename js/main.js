@@ -45,70 +45,39 @@ var tests = [
   { description: "capital letters can do yoga",          run: generateDummyTest() }
 ];
 
-var tests_passed = 0;
-var tests_failed = 0;
-var tests_running = 0;
-var tests_completed = 0;
-
-function TestRunnerView() {
-  this.finalMessage = document.createElement("h2");
-  this.statsBox = document.getElementById("js-stats");
-  this.testContainer = document.getElementById("js-test-container");
-  this.testRunnerButton = document.getElementById("js-test-runner");
-};
-
-TestRunnerView.prototype = {
-  loadTests: function(){
-    var html = "";
-    for ( test in tests ) {
-      html = html + "<div><h2>Test " + test + "</h2><h3>Status: <span id=\"status"+ test +"\">Not Started Yet</span></h3><p>" + tests[test]["description"] + "<p></div>";
-    }
-    this.testContainer.innerHTML = html;
-  },
-  updateTest: function(text, index){
-    document.getElementById("status" + index).innerText = text;
-  },
-  updateStat: function(statId, statValue){
-    document.getElementById(statId).innerText = statValue;
-  },
-  showFinalMessage: function(){
-    this.finalMessage.innerText = "All Tests Completed!"
-    this.statsBox.appendChild(this.finalMessage);
-  }
-}
-
 function TestRunnerController(view) {
   this.testRunnerView = view;
+  this.testsPassed = 0;
+  this.testsFailed = 0;
+  this.testsRunning = 0;
+  this.testsCompleted = 0;
 };
 
 TestRunnerController.prototype = {
   runTests: function(){
-    tests_running = tests.length;
+    this.testsRunning = tests.length;
     tests.forEach(function(currentValue, index, array){
       currentValue.run( function(){
         if(arguments[0] == true) {
           this.testRunnerView.updateTest("Passed", index);
-          tests_passed += 1;
+          this.testsPassed += 1;
         } else {
           this.testRunnerView.updateTest("Failed", index);
-          tests_failed += 1;
+          this.testsFailed += 1;
         }
-        tests_completed += 1;
-        tests_running -= 1;
-        this.testRunnerView.updateStat("passed", tests_passed);
-        this.testRunnerView.updateStat("failed", tests_failed);
-        this.testRunnerView.updateStat("running", tests_running);
-        this.testRunnerView.updateStat("completed", tests_completed);
-        if (tests_completed === tests.length) {
+        this.testsCompleted += 1;
+        this.testsRunning -= 1;
+        this.testRunnerView.updateStat("passed", this.testsPassed);
+        this.testRunnerView.updateStat("failed", this.testsFailed);
+        this.testRunnerView.updateStat("running", this.testsRunning);
+        this.testRunnerView.updateStat("completed", this.testsCompleted);
+        if (this.testsCompleted === tests.length) {
           this.testRunnerView.showFinalMessage();
         }
       }.bind(this));
     }.bind(this));
   }
 }
-
-
-
 
 window.onload = function(){
   var testRunnerView = new TestRunnerView();
