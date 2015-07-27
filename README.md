@@ -26,5 +26,6 @@ My next steps:
 - Go back to my Object Oriented JS branch and work on moving to a system where each test is an object that keeps track of its own state and can render information about itself
 - Create a TestRunner object that tracks the test results as a whole
 - Think about separating the functions into MVC pattern
+- Determine what kind of test coverage is appropriate
 
 I want to keep working on this because it's pretty fun. I'll send you what I come up with.

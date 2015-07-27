@@ -1,5 +1,5 @@
 function generateDummyTest() {
-  var delay = 1000 + Math.random() * 2000;
+  var delay = 7000 + Math.random() * 7000;
   var testPassed = Math.random() > 0.5;
 
   return function(callback) {
@@ -27,7 +27,6 @@ function runTests(){
   tests_running = tests.length;
   tests.forEach(function(currentValue, index, array){
     currentValue.run( function(){
-      console.log(index);
         if(arguments[0] == true) {
           updateTest("Passed", index);
           tests_passed += 1;
@@ -37,10 +36,10 @@ function runTests(){
         }
           tests_completed += 1;
           tests_running -= 1;
-          console.log("Tests Passed: " + tests_passed);
-          console.log("Tests Failed: " + tests_failed);
-          console.log("Tests Running: " + tests_running);
-          console.log("Tests Completed: " + tests_completed);
+          updateStat("passed", tests_passed);
+          updateStat("failed", tests_failed);
+          updateStat("running", tests_running);
+          updateStat("completed", tests_completed);
           if (tests_completed === tests.length) {
             sayDone();
           }
@@ -48,8 +47,13 @@ function runTests(){
   }, this);
 }
 
+function updateStat(stat, stat_value){
+  document.getElementById(stat).innerText = stat_value;
+}
+
 function updateTest(text, index){
-  document.getElementById("status" + index).innerText = text;
+  var status = document.getElementById("status" + index);
+  status.innerText = text;
 }
 
 function sayDone(){
