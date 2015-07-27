@@ -26,7 +26,7 @@ TestRunnerView.prototype = {
 }
 
 function generateDummyTest() {
-  var delay = 1000 + Math.random() * 2000;
+  var delay = 7000 + Math.random() * 7000;
   var testPassed = Math.random() > 0.5;
 
   return function(callback) {
