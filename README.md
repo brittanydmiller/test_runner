@@ -29,3 +29,8 @@ My next steps:
 - Determine what kind of test coverage is appropriate
 
 I want to keep working on this because it's pretty fun. I'll send you what I come up with.
+
+Updates:
+- I did try out making DOM nodes instead of HTML strings but it got unwieldy quickly, so I decided against it.
+- I can still see a case for making a Test model that controlls its own response, but I'm not sure it's necessary at this point.
+- A view and a controller became apparent as I refactored the code, so I added those.
