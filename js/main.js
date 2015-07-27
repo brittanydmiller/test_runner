@@ -1,5 +1,5 @@
 function generateDummyTest() {
-  var delay = 7000 + Math.random() * 7000;
+  var delay = 1000 + Math.random() * 2000;
   var testPassed = Math.random() > 0.5;
 
   return function(callback) {
@@ -24,57 +24,61 @@ var tests_running = 0;
 var tests_completed = 0;
 
 function runTests(){
+  var testRunnerView = new TestRunnerView();
   tests_running = tests.length;
   tests.forEach(function(currentValue, index, array){
     currentValue.run( function(){
         if(arguments[0] == true) {
-          updateTest("Passed", index);
+          testRunnerView.updateTest("Passed", index);
           tests_passed += 1;
         } else {
-          updateTest("Failed", index);
+          testRunnerView.updateTest("Failed", index);
           tests_failed += 1;
         }
           tests_completed += 1;
           tests_running -= 1;
-          updateStat("passed", tests_passed);
-          updateStat("failed", tests_failed);
-          updateStat("running", tests_running);
-          updateStat("completed", tests_completed);
+          testRunnerView.updateStat("passed", tests_passed);
+          testRunnerView.updateStat("failed", tests_failed);
+          testRunnerView.updateStat("running", tests_running);
+          testRunnerView.updateStat("completed", tests_completed);
           if (tests_completed === tests.length) {
-            sayDone();
+            testRunnerView.showFinalMessage();
           }
       });
   }, this);
 }
 
-function updateStat(stat, stat_value){
-  document.getElementById(stat).innerText = stat_value;
-}
-
-function updateTest(text, index){
-  var status = document.getElementById("status" + index);
-  status.innerText = text;
-}
-
-function sayDone(){
-  var final_message = document.createElement("h2");
-  final_message.innerText = "All Tests Completed!"
-  document.getElementById("js-stats").appendChild(final_message);
+function TestRunnerView() {
+  this.finalMessage = document.createElement("h2");
+  this.statsBox = document.getElementById("js-stats");
+  this.testContainer = document.getElementById("js-test-container");
+  this.testRunnerButton = document.getElementById("js-test-runner");
 };
 
-
-function loadTests(){
-  var container = document.getElementById("js-test-container")
-  var html = "";
-  for ( test in tests ) {
-    html = html + "<div><h2>Test " + test + "</h2><h3>Status: <span id=\"status"+ test +"\">Not Started Yet</span></h3><p>" + tests[test]["description"] + "<p></div>";
+TestRunnerView.prototype = {
+  loadTests: function(){
+    var html = "";
+    for ( test in tests ) {
+      html = html + "<div><h2>Test " + test + "</h2><h3>Status: <span id=\"status"+ test +"\">Not Started Yet</span></h3><p>" + tests[test]["description"] + "<p></div>";
+    }
+    this.testContainer.innerHTML = html;
+  },
+  updateTest: function(text, index){
+    document.getElementById("status" + index).innerText = text;
+  },
+  updateStat: function(statId, statValue){
+    document.getElementById(statId).innerText = statValue;
+  },
+  showFinalMessage: function(){
+    this.finalMessage.innerText = "All Tests Completed!"
+    this.statsBox.appendChild(this.finalMessage);
   }
-  container.innerHTML = html;
 }
 
 
 window.onload = function(){
   document.getElementById("js-test-runner").addEventListener("click", runTests);
-  loadTests();
+  var testRunnerView = new TestRunnerView();
+  testRunnerView.loadTests();
 }
 
